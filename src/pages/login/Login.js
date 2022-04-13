@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import logo from "../../asset/melodico.png";
 import "./login.css";
 import { userLogin } from "../../redux/actions/register&login.action";
@@ -8,13 +9,13 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e)=>{
-    e.preventDefault()
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    dispatch(userLogin({email: email, password: password}))
-  }
+    dispatch(userLogin({ email: email, password: password }));
+  };
 
   return (
     <div>
@@ -31,11 +32,11 @@ function Login() {
             <div>
               <img className="logo-login rounded-3" src={logo} alt="" />
               <p className="title-login text-center">
-                Login gratis unutk mulai mendengarkan
+                Login gratis untuk mulai mendengarkan
               </p>
             </div>
 
-            <form onSubmit={(e)=>handleSubmit(e)}>
+            <form onSubmit={(e) => handleSubmit(e)}>
               <div className="content-login">
                 <label className="d-block mt-3">Email :</label>
                 <input
@@ -52,9 +53,14 @@ function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <div className="mt-2">
-                  <button type="submit" className="btn-login rounded-3">Login</button>
+                  <button type="submit" className="btn-login rounded-3">
+                    Login
+                  </button>
                   <p className="d-inline ms-2">
-                    Tidak punya akun? <b>Register</b>
+                    Tidak punya akun?{" "}
+                    <Link to="/register">
+                      <b>Register</b>
+                    </Link>
                   </p>
                 </div>
               </div>
