@@ -1,8 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import logo from "../../asset/melodico.png";
 import './register.css'
+import { userRegister } from "../../redux/actions/register&login.action";
 
 function Register() {
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const dispatch = useDispatch()
+
+  const handleSubmit = (e)=>{
+    e.preventDefault()
+
+    dispatch(userRegister({name: name, email: email, password: password}))
+  }
+
+
   return (
     <div>
       <div className="container">
@@ -12,23 +27,16 @@ function Register() {
         </div>
 
         <div className="content-form mb-5">
-          <form>
+          <form onSubmit={(e)=>handleSubmit(e)} >
             <label className="d-block">Name :</label>
-            <input type="text" className="w-100 rounded-3" />
-            <label className="d-block mt-3">Date of birth :</label>
-            <input type="date" className="w-100 rounded-3" />
-            <label className="d-block mt-3">Gender :</label>
-            <select className="w-100 rounded-3">
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
+            <input type="text" className="w-100 rounded-3" value={name} onChange={(e) => setName(e.target.value)} />
             <label className="d-block mt-3">Email :</label>
-            <input type="email" className="w-100 rounded-3" />
+            <input type="text" className="w-100 rounded-3" value={email} onChange={(e) => setEmail(e.target.value)} />
             <label className="d-block mt-3">Password :</label>
-            <input type="password" className="w-100 rounded-3" />
+            <input type="password" className="w-100 rounded-3" value={password} onChange={(e) => setPassword(e.target.value)} />
 
             <div className="mt-2">
-            <button className="btn-register rounded-3">Register</button>
+            <button type="submit" className="btn-register rounded-3">Register</button>
             <p className="d-inline ms-2">Sudah punya akun? <b>Login</b></p>
             </div>
           </form>
