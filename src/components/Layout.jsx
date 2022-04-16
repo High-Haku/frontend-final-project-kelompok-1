@@ -8,6 +8,7 @@ import { getToken } from "../redux/actions/spotifyAccess.action";
 import Navbar from "./Navbar";
 import Player from "./Player";
 import Sidebar from "./Sidebar";
+import loading from "../asset/loading.svg";
 
 // Style //
 import "./layout.css";
@@ -24,6 +25,8 @@ function Layout() {
   // Get Spotify Access Token //
   const dispatch = useDispatch();
   const token = useSelector((state) => state.spotifyAccessReducer);
+
+  // console.log(token);
 
   useEffect(() => {
     const regex = /(?<=token=).*$/g;
@@ -47,19 +50,39 @@ function Layout() {
   //////////////////////////////////////
   return (
     <>
-      <div className="d-flex" style={{ position: "relative" }}>
-        <Sidebar />
-        <div
-          className="d-flex flex-column w-100"
-          style={{ position: "absolute", zIndex: 10 }}
-        >
-          <Navbar />
-          <div className="px-5 py-4" style={{ margin: "50px 0 50px 200px" }}>
-            <Outlet />
+      {token.accessToken !== "" ? (
+        <div className="d-flex" style={{ position: "relative" }}>
+          <Sidebar />
+          <div
+            className="d-flex flex-column w-100"
+            style={{
+              position: "absolute",
+              zIndex: 10,
+              backgroundColor: "#1f2127",
+            }}
+          >
+            <Navbar />
+            <div
+              className="px-5 py-4"
+              style={{
+                margin: "50px 0 50px 200px",
+              }}
+            >
+              <Outlet />
+            </div>
           </div>
+          <Player />
         </div>
-        <Player />
-      </div>
+      ) : (
+        <div className="d-flex align-items-center" style={{ height: "100vh" }}>
+          <img
+            className="m-auto"
+            src={loading}
+            alt="Loading"
+            style={{ width: "100px" }}
+          />
+        </div>
+      )}
     </>
   );
 }

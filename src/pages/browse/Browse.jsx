@@ -29,7 +29,7 @@ function Browse() {
       //   .getAvailableGenreSeeds()
       .then((res) => {
         setRecomendations(res.body.tracks);
-        console.log(res);
+        // console.log(res);
       });
   }, []);
 
