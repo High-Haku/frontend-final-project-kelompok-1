@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 
 const AUTH_URL =
-  "https://accounts.spotify.com/authorize?client_id=05d2d24ef6f84db5adb08b96da5edcb2&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
+  "https://accounts.spotify.com/authorize?client_id=ba70ac6a4a564aa980ecfbbe38450255&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state";
 
 function Spotify() {
   return (

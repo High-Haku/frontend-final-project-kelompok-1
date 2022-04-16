@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../asset/melodico.png";
 import "./login.css";
 import { userLogin } from "../../redux/actions/register&login.action";
@@ -8,14 +8,21 @@ import { userLogin } from "../../redux/actions/register&login.action";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    dispatch(userLogin({ email: email, password: password }));
+    dispatch(userLogin({ email, password }));
   };
+
+  useEffect(() => {
+    const regex = /(?<=token=).*$/g;
+    const loginToken = regex.exec(document.cookie);
+
+    // check if user is login
+    if (loginToken) navigate("/");
+  }, []);
 
   return (
     <div>
@@ -44,6 +51,7 @@ function Login() {
                   className="w-100 rounded-3"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
                 <label className="d-block mt-3">Password :</label>
                 <input
@@ -51,6 +59,7 @@ function Login() {
                   className="w-100 rounded-3"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
                 <div className="mt-2">
                   <button type="submit" className="btn-login rounded-3">
