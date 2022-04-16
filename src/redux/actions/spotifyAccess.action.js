@@ -16,7 +16,7 @@ export const getToken = (code) => {
     });
 
     axios
-      .post("http://localhost:3001/spotify", { code })
+      .post("https://melodico.herokuapp.com/spotify", { code })
       .then((res) => {
         dispatch({
           type: GET_TOKEN,

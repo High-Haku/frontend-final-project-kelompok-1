@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
   function changeMenuStyle(target) {
+    console.log(target);
     resetStyle();
     target.parentElement.parentElement.classList.add("active");
   }
@@ -28,19 +29,19 @@ function Sidebar() {
         >
           <Link to="/" onClick={(e) => changeMenuStyle(e.target)}>
             <ion-icon name="home"></ion-icon>
-            <span className="ms-3">Home</span>
+            <span className="ms-3 d-inline-block">Home</span>
           </Link>
         </li>
         <li id="browse" className="menu px-3 d-flex align-items-center p-2">
           <Link to="/browse" onClick={(e) => changeMenuStyle(e.target)}>
             <ion-icon name="compass"></ion-icon>
-            <span className="ms-3">Browse</span>
+            <span className="ms-3 d-inline-block">Browse</span>
           </Link>
         </li>
         <li id="library" className="menu px-3 d-flex align-items-center p-2">
           <Link to="/library" onClick={(e) => changeMenuStyle(e.target)}>
             <ion-icon name="musical-notes"></ion-icon>
-            <span className="ms-3">Library</span>
+            <span className="ms-3 d-inline-block">Library</span>
           </Link>
         </li>
       </ul>
