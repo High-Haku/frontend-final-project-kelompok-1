@@ -10,6 +10,7 @@ import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import Layout from "./components/Layout";
 import NotFound from "./pages/404/NotFound";
+import Upgrade from "./pages/upgrade/Upgrade";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/upgrade" element={<Upgrade />}></Route>
       </Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/register" element={<Register />}></Route>
