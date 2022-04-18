@@ -1,4 +1,5 @@
 import axios from "axios";
+// axios.defaults.withCredentials = true;
 
 export const USER_REGISTER = "USER_REGISTER";
 export const USER_LOGIN = "USER_LOGIN";
@@ -17,7 +18,7 @@ export const userRegister = (data) => {
 
     axios({
       method: "POST",
-      url: "https://melodico.herokuapp.com/users",
+      url: "http://localhost:3001/users",
       data: data,
     })
       .then((response) => {
@@ -59,7 +60,7 @@ export const userLogin = (data) => {
 
     axios({
       method: "POST",
-      url: "https://melodico.herokuapp.com/login",
+      url: "http://localhost:3001/login",
       data: data,
     })
       .then((response) => {
