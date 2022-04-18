@@ -31,19 +31,13 @@ function Layout() {
     <>
       <div className="d-flex" style={{ position: "relative" }}>
         <Sidebar />
-        <div
-          className="d-flex flex-column w-100"
-          style={{
-            position: "absolute",
-            zIndex: 10,
-            backgroundColor: "#1f2127",
-          }}
-        >
+        <div className="w-100">
           <Navbar />
           <div
             className="px-5 py-4"
             style={{
               margin: "50px 0 50px 200px",
+              position: "relative",
             }}
           >
             <Outlet />

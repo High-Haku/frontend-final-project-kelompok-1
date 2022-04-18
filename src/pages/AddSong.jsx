@@ -1,20 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
+import Loading from "../components/Loading";
 
 function AddSong() {
   const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const regex = /(?<=token=).*$/g;
   const loginToken = regex.exec(document.cookie);
 
+  const [artistList, setArtistList] = useState([]);
+
+  useEffect(() => {
+    getArtist();
+  }, []);
+
+  async function getArtist() {
+    const res = await axios
+      .get("http://localhost:3001/artists", {
+        headers: { authorization: "Bearer " + loginToken },
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setArtistList(res.data.data);
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
+
     console.log(formData);
 
+    const data = new FormData();
+    for (const d in formData) {
+      if (formData[d]) data.append(d, formData[d]);
+    }
+
+    setLoading(true);
     await axios
-      .post("http://localhost:3001/songs", formData, {
-        headers: { authorization: "Bearer " + loginToken },
+      .post("http://localhost:3001/songs", data, {
+        headers: {
+          authorization: "Bearer " + loginToken,
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         console.log(res);
@@ -25,16 +55,20 @@ function AddSong() {
         console.log(err);
         alert("error");
       });
+    setLoading(false);
 
     e.target.reset();
   }
 
   return (
     <>
+      {loading ? <Loading /> : ""}
       <h2>Add New Song</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
-          <Form.Label>Title</Form.Label>
+          <Form.Label>
+            Title <span className="text-warning">*</span>
+          </Form.Label>
           <Form.Control
             type="text"
             required
@@ -46,37 +80,30 @@ function AddSong() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Artist</Form.Label>
+          <Form.Label>
+            Artist <span className="text-warning">*</span>
+          </Form.Label>
           <Form.Select
             required
             onChange={(e) =>
               setFormData({ ...formData, artist: e.target.value })
             }
           >
-            <option>Artist</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
-          </Form.Select>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>Album</Form.Label>
-          <Form.Select
-            required
-            onChange={(e) =>
-              setFormData({ ...formData, albums: e.target.value })
-            }
-          >
-            <option>Album</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+            <option></option>
+            <>
+              {artistList.map((list) => (
+                <option key={list["_id"]} value={list["_id"]}>
+                  {list.name}
+                </option>
+              ))}
+            </>
           </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Genre</Form.Label>
+          <Form.Label>
+            Genre <span className="text-warning">*</span>
+          </Form.Label>
           <Form.Control
             type="text"
             required
@@ -88,7 +115,9 @@ function AddSong() {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Release Date</Form.Label>
+          <Form.Label>
+            Release Date <span className="text-warning">*</span>
+          </Form.Label>
           <Form.Control
             type="date"
             required
@@ -111,13 +140,17 @@ function AddSong() {
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>File (mp3)</Form.Label>
+          <Form.Label>
+            MP3 / WAV File (max. 8MB) <span className="text-warning">*</span>
+          </Form.Label>
           <Form.Control
             type="file"
             required
-            accept="audio/mp3"
+            accept=".mp3 ,.wav"
             placeholder="song video"
-            onChange={(e) => setFormData({ ...formData, file: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, file: e.target.files[0] })
+            }
           />
         </Form.Group>
 
