@@ -4,7 +4,7 @@ import './navbar.css'
 
 function Navbar() {
   return (
-    <nav className="bg-warning w-100" style={{ height: "50px" }}>
+    <nav className="bg-warning w-80" style={{ height: "50px" }}>
       <div className="container-fluid">
         <div className="row">
           <div className="col">
@@ -20,8 +20,8 @@ function Navbar() {
             />
             <div style={{ width: "250px", display: "inline", float: "right" }}>
               <button
-                className="bg-info me-2 rounded-3"
-                style={{ border: "none", height: "35px" }}
+                className="bg-dark me-2 rounded-3"
+                style={{ border: "none", height: "35px", color: "yellow" }}
               >
                 Upgrade Account
               </button>

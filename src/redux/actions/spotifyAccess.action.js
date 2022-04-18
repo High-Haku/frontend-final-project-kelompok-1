@@ -1,5 +1,5 @@
 import axios from "axios";
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 export const GET_TOKEN = "GET_TOKEN";
 
@@ -16,7 +16,7 @@ export const getToken = (code) => {
     });
 
     axios
-      .post("https://melodico.herokuapp.com/spotify", { code })
+      .post("http://localhost:3001/spotify", { code })
       .then((res) => {
         dispatch({
           type: GET_TOKEN,
