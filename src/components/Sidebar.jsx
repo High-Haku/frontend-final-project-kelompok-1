@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
   function changeMenuStyle(target) {
-    console.log(target);
     resetStyle();
     target.parentElement.parentElement.classList.add("active");
   }
@@ -18,8 +17,8 @@ function Sidebar() {
 
   return (
     <div
-      className="sidebar bg-dark vh-100 text-light fixed-top shadow"
-      style={{ width: "200px" }}
+      className="sidebar bg-dark vh-100 text-light shadow"
+      style={{ width: "200px", position: "fixed" }}
     >
       <img src={logo} alt="logo" className="w-75 mt-3 d-block mx-auto" />
       <ul className="sidebar-menu list-group mt-3">
