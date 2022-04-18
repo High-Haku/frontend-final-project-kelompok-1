@@ -12,7 +12,9 @@ import Layout from "./components/Layout";
 import NotFound from "./pages/404/NotFound";
 import Upgrade from "./pages/upgrade/Upgrade";
 import Browse from "./pages/browse/Browse";
-
+import AddSong from "./pages/AddSong";
+import AddAlbum from "./pages/AddAlbum";
+import AddArtist from "./pages/AddArtist";
 
 function App() {
   return (
@@ -22,6 +24,9 @@ function App() {
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/upgrade" element={<Upgrade />}></Route>
         <Route path="/browse" element={<Browse />}></Route>
+        <Route path="/song" element={<AddSong />}></Route>
+        <Route path="/album" element={<AddAlbum />}></Route>
+        <Route path="/artist" element={<AddArtist />}></Route>
       </Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/register" element={<Register />}></Route>
