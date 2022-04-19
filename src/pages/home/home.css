@@ -1,0 +1,82 @@
+.updateLagu {
+    width: 500px;
+    height: 130px;
+    background-color: yellow;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.updateLagu img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.updateLagu input {
+    width: 300px;
+    height: 50px;
+    border: none;
+    outline: none;
+}
+
+.updateLagu button {
+    width: 60px;
+    height: 50px;
+    border: none;
+    outline: none;
+    background-color: black;
+    color: aliceblue;
+    font-weight: bolder;
+}
+
+.getUpdate {
+    width: 500px;
+    height: 200px;
+    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.getUpdate .titik{
+    color: black;
+    font-weight: bolder;
+    float: right;
+}
+
+.getUpdate img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.getUpdate .nama {
+    font-weight: bolder;
+    display: inline;
+    color: black;
+}
+
+.hasil-reaksi{
+    display: flex;
+    justify-content: space-between;    
+}
+
+.hasil-reaksi img {
+    width: 20px;
+    height: 20px;
+}
+
+.hasil-reaksi span {
+    color: black;
+}
+
+.reaksi {
+    display: flex;
+    justify-content: space-between;
+}
+.reaksi img {
+    width: 30px;
+    height: 30px;
+}
