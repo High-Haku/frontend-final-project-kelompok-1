@@ -1,47 +1,50 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./home.css";
-// import jwtDecode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 import iconLike from "../../asset/icon/like.png";
 import iconComment from "../../asset/icon/comment.png";
 import iconShare from "../../asset/icon/share.png";
 import likeBlue from "../../asset/icon/like-blue.png";
 import { Dropdown } from "react-bootstrap";
+import moment from "moment";
 
 function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
   const regex = /(?<=token=).*$/g;
   const loginToken = regex.exec(document.cookie);
-  // const user = jwtDecode(loginToken)
-  // // console.log(user);
-  // // console.log(loginToken);
-
+  // const user = jwtDecode(loginToken[0])
+  // console.log(user);
+  // console.log(loginToken);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios
-        .post(
-          "http://localhost:3001/posting/",
-          {
-            content: update,
-          },
-          { headers: { authorization: "Bearer " + loginToken } }
+      .post(
+        "https://melodico.herokuapp.com/posting/",
+        {
+          content: update,
+          postedBy: "6255429d0b10cd13256b01c5"
+        },
+        { headers: { authorization: "Bearer " + loginToken } }
         )
         .then((res) => {
           console.log(res);
           getPost();
         });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getPost = async () => {
-    const res = await axios.get("http://localhost:3001/posting/");
-    setPosting(res.data.data);
-    console.log(res.data.data);
-  };
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    
+    const getPost = async () => {
+      const res = await axios.get("https://melodico.herokuapp.com/posting/", { headers: { authorization: "Bearer " + loginToken } });
+      setPosting(res.data.data);
+      console.log(res.data.data);
+    };
+    
 
   useEffect(() => {
     getPost();
@@ -49,13 +52,16 @@ function Home() {
 
   const deletePost = async (id) => {
     try {
-      console.log(id);
-      await axios.delete(`http://localhost:3001/posting/${id}`);
+      await axios.delete(`https://melodico.herokuapp.com/posting/${id}`, { headers: { authorization: "Bearer " + loginToken } });
       getPost();
     } catch (error) {
       console.log(error);
     }
   };
+
+  // const getWaktu = ()=>{
+
+  // } 
 
   return (
     <div>
@@ -89,13 +95,10 @@ function Home() {
               ></Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item
-                  href="#/action-1"
-                  onClick={() => deletePost(item["_id"])}
-                >
+                <Dropdown.Item onClick={() => deletePost(item["_id"])}>
                   Hapus
                 </Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Sembunyikan</Dropdown.Item>
+                <Dropdown.Item>Sembunyikan</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <img
@@ -103,7 +106,10 @@ function Home() {
               src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
               alt=""
             />
-            <p className="nama ms-1">Mukhammad Abdul mukhid</p>
+            <div className=" ms-1" style={{ display: "inline-block" }}>
+              <p className="nama pt-3">Mukhammad Abdul mukhid</p>
+              <p style={{ color: "black", fontSize: "10px" }}>{ moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}</p>
+            </div>
             <div>
               <p className="ms-3 mt-1" style={{ color: "black" }}>
                 {item.content}
@@ -116,11 +122,12 @@ function Home() {
             <hr style={{ color: "black" }} />
 
             {/* reaksi */}
-            <div className="reaksi ms-4 me-4">
-              <img src={iconLike} alt="" />
+            <div className="reaksi text-dark ms-4 me-4">
+            <ion-icon  name="heart-outline"></ion-icon>
               <img src={iconComment} alt="" />
               <img src={iconShare} alt="" />
             </div>
+            <div></div>
           </div>
         ))}
       </div>
