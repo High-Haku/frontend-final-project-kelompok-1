@@ -18,7 +18,7 @@ function AddSong() {
 
   async function getArtist() {
     const res = await axios
-      .get("http://localhost:3001/artists", {
+      .get("https://melodico.herokuapp.com/artists", {
         headers: { authorization: "Bearer " + loginToken },
       })
       .catch((err) => {
@@ -40,7 +40,7 @@ function AddSong() {
 
     setLoading(true);
     await axios
-      .post("http://localhost:3001/songs", data, {
+      .post("https://melodico.herokuapp.com/songs", data, {
         headers: {
           authorization: "Bearer " + loginToken,
           "Content-Type": "multipart/form-data",
