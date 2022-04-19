@@ -16,6 +16,7 @@ import Browse from "./pages/browse/Browse";
 
 function App() {
   return (
+    // <Home/>
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />}></Route>

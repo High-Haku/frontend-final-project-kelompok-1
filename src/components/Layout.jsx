@@ -50,7 +50,7 @@ function Layout() {
   //////////////////////////////////////
   return (
     <>
-      {token.accessToken !== "" ? (
+      
         <div className="d-flex" style={{ position: "relative" }}>
           <Sidebar />
           <div
@@ -73,18 +73,9 @@ function Layout() {
           </div>
           <Player />
         </div>
-      ) : (
-        <div className="d-flex align-items-center" style={{ height: "100vh" }}>
-          <img
-            className="m-auto"
-            src={loading}
-            alt="Loading"
-            style={{ width: "100px" }}
-          />
-        </div>
-      )}
-    </>
-  );
-}
+        </>
+
+  )
+            }
 
 export default Layout;
