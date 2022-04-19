@@ -13,7 +13,6 @@ import NotFound from "./pages/404/NotFound";
 import Upgrade from "./pages/upgrade/Upgrade";
 import Browse from "./pages/browse/Browse";
 
-
 function App() {
   return (
     <Routes>
