@@ -18,7 +18,7 @@ export const userRegister = (data) => {
 
     axios({
       method: "POST",
-      url: "http://localhost:3001/users",
+      url: "https://melodico.herokuapp.com/users",
       data: data,
     })
       .then((response) => {
@@ -60,7 +60,7 @@ export const userLogin = (data) => {
 
     axios({
       method: "POST",
-      url: "http://localhost:3001/login",
+      url: "https://melodico.herokuapp.com/login",
       data: data,
     })
       .then((response) => {

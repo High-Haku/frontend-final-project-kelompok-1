@@ -20,7 +20,7 @@ function AddArtist() {
 
     setLoading(true);
     await axios
-      .post("http://localhost:3001/artists", data, {
+      .post("https://melodico.herokuapp.com/artists", data, {
         headers: { authorization: "Bearer " + loginToken },
       })
       .then((res) => {
