@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import Loading from "../components/Loading";
+import { useSelector } from "react-redux";
 
 function AddArtist() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const regex = /(?<=token=).*$/g;
-  const loginToken = regex.exec(document.cookie);
+  const user = useSelector((state) => state.userReducer);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -21,7 +21,7 @@ function AddArtist() {
     setLoading(true);
     await axios
       .post("https://melodico.herokuapp.com/artists", data, {
-        headers: { authorization: "Bearer " + loginToken },
+        headers: { authorization: "Bearer " + user.token },
       })
       .then((res) => {
         console.log(res);

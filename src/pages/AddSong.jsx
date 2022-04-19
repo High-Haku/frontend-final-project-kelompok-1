@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import Loading from "../components/Loading";
+import { useSelector } from "react-redux";
 
 function AddSong() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const regex = /(?<=token=).*$/g;
-  const loginToken = regex.exec(document.cookie);
+  const user = useSelector((state) => state.userReducer);
 
   const [artistList, setArtistList] = useState([]);
 
@@ -19,7 +19,7 @@ function AddSong() {
   async function getArtist() {
     const res = await axios
       .get("https://melodico.herokuapp.com/artists", {
-        headers: { authorization: "Bearer " + loginToken },
+        headers: { authorization: "Bearer " + user.token },
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +42,7 @@ function AddSong() {
     await axios
       .post("https://melodico.herokuapp.com/songs", data, {
         headers: {
-          authorization: "Bearer " + loginToken,
+          authorization: "Bearer " + user.token,
           "Content-Type": "multipart/form-data",
         },
       })
@@ -64,7 +64,7 @@ function AddSong() {
     <>
       {loading ? <Loading /> : ""}
       <h2>Add New Song</h2>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} autoComplete="off">
         <Form.Group className="mb-3">
           <Form.Label>
             Title <span className="text-warning">*</span>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import Loading from "../components/Loading.jsx";
+import { useSelector } from "react-redux";
 
 function AddAlbum() {
   const [formData, setFormData] = useState({});
@@ -9,18 +10,18 @@ function AddAlbum() {
 
   const [artist, setArtist] = useState("");
   const [artistList, setArtistList] = useState([]);
+  const [songList, setsongList] = useState([]);
 
-  const regex = /(?<=token=).*$/g;
-  const loginToken = regex.exec(document.cookie);
+  const user = useSelector((state) => state.userReducer);
 
   useEffect(() => {
-    getArtist();
-  }, []);
+    if (user) getArtist();
+  }, [user]);
 
   async function getArtist() {
     const res = await axios
       .get("https://melodico.herokuapp.com/artists", {
-        headers: { authorization: "Bearer " + loginToken },
+        headers: { authorization: "Bearer " + user.token },
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +43,7 @@ function AddAlbum() {
     setLoading(true);
     await axios
       .post("https://melodico.herokuapp.com/albums", data, {
-        headers: { authorization: "Bearer " + loginToken },
+        headers: { authorization: "Bearer " + user.token },
       })
       .then((res) => {
         console.log(res);
@@ -105,6 +106,11 @@ function AddAlbum() {
             }
           >
             <option></option>
+            {songList.map((list) => (
+              <option key={list["_id"]} value={list["_id"]}>
+                {list.name}
+              </option>
+            ))}
           </Form.Select>
         </Form.Group>
 
