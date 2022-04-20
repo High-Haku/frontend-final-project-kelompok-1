@@ -9,9 +9,16 @@ import axios from "axios";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(false);
+  const [user, setUser] = useState({});
+  const [done, setDone] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(userLogin({ email, password }));
+    setDone(true);
+  };
 
   async function getUser() {
     const userLogin = await axios
@@ -20,11 +27,6 @@ function Login() {
 
     setUser(userLogin);
   }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await dispatch(userLogin({ email, password }));
-  };
 
   useEffect(() => {
     getUser();
@@ -80,6 +82,9 @@ function Login() {
                     <Link to="/register">
                       <b>Register</b>
                     </Link>
+                  </p>
+                  <p>
+                    {done && "Login anda berhasil, selamat mendengarkan . . ."}
                   </p>
                 </div>
               </div>

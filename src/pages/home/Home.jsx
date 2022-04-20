@@ -1,29 +1,32 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import "./home.css";
-
-// import jwtDecode from "jwt-decode";
-import iconLike from "../../asset/icon/like.png";
-import iconComment from "../../asset/icon/comment.png";
-import iconShare from "../../asset/icon/share.png";
-import likeBlue from "../../asset/icon/like-blue.png";
+import moment from "moment";
+import { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
+
+import "./home.css";
+
+import Loading from "../../components/Loading";
 
 function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [love, setLove] = useState(1);
 
   const user = useSelector((state) => state.userReducer);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       await axios
         .post(
           "https://melodico.herokuapp.com/posting/",
           {
             content: update,
+            postedBy: "6255429d0b10cd13256b01c5",
+            postDate: moment().format("YYMMDD, h:mm:ss"),
           },
           { headers: { authorization: "Bearer " + user.token } }
         )
@@ -34,6 +37,8 @@ function Home() {
     } catch (error) {
       console.log(error);
     }
+    setLoading(false);
+    setUpdate("");
   };
 
   const getPost = async () => {
@@ -41,7 +46,6 @@ function Home() {
       headers: { authorization: "Bearer " + user.token },
     });
     setPosting(res.data.data);
-    console.log(res.data.data);
   };
 
   useEffect(() => {
@@ -50,7 +54,6 @@ function Home() {
 
   const deletePost = async (id) => {
     try {
-      console.log(id);
       await axios.delete(`https://melodico.herokuapp.com/posting/${id}`, {
         headers: { authorization: "Bearer " + user.token },
       });
@@ -60,8 +63,27 @@ function Home() {
     }
   };
 
+  const clickLove = async () => {
+    try {
+      await axios
+        .post(
+          "https://melodico.herokuapp.com/posting/",
+          {
+            love: love,
+          },
+          { headers: { authorization: "Bearer " + user.token } }
+        )
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
+      {loading ? <Loading /> : ""}
       <div className="updateLagu rounded-3">
         <img
           src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
@@ -95,7 +117,7 @@ function Home() {
                 <Dropdown.Item onClick={() => deletePost(item["_id"])}>
                   Hapus
                 </Dropdown.Item>
-                <Dropdown.Item href="#/action-2">Sembunyikan</Dropdown.Item>
+                <Dropdown.Item>Sembunyikan</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <img
@@ -103,24 +125,30 @@ function Home() {
               src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
               alt=""
             />
-            <p className="nama ms-1">Mukhammad Abdul mukhid</p>
+            <div className=" ms-1" style={{ display: "inline-block" }}>
+              <p className="nama pt-3">Mukhammad Abdul mukhid</p>
+              <p style={{ color: "black", fontSize: "10px" }}>
+                {moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}
+              </p>
+            </div>
             <div>
               <p className="ms-3 mt-1" style={{ color: "black" }}>
                 {item.content}
               </p>
             </div>
-            <div className="hasil-reaksi ms-2 me-2">
-              <img src={likeBlue} alt="" />
+            <div className="hasil-reaksi text-danger ms-2 me-2">
+              <ion-icon name="heart"></ion-icon>
               <span>comment</span>
             </div>
             <hr style={{ color: "black" }} />
 
             {/* reaksi */}
-            <div className="reaksi ms-4 me-4">
-              <img src={iconLike} alt="" />
-              <img src={iconComment} alt="" />
-              <img src={iconShare} alt="" />
+            <div className="reaksi text-dark ms-4 me-4">
+              <ion-icon onClick={clickLove} name="heart-outline"></ion-icon>
+              <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+              <ion-icon name="share-social-outline"></ion-icon>
             </div>
+            <div></div>
           </div>
         ))}
       </div>
