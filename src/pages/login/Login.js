@@ -27,15 +27,15 @@ function Login() {
   return (
     <div>
       <div className="container">
-        <div className="row mt-4">
+        <div className="row">
           <div className="col-lg-5 col-kiri" style={{ height: "90vh" }}>
             <img
-              className="content-img rounded-3"
+              className="content-img rounded-3 mt-4"
               src="https://images.unsplash.com/photo-1516057747705-0609711c1b31?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fG11c2lrJTIwYmFuZHxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"
               alt=""
             />
           </div>
-          <div className="col-lg-6 offset-lg-1 col-xs-12 offset-xs-0">
+          <div className="col-lg-6 offset-lg-1 col-xs-12 offset-xs-0 mt-4">
             <div>
               <img className="logo-login rounded-3" src={logo} alt="" />
               <p className="title-login text-center">

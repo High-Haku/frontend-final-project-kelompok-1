@@ -10,8 +10,17 @@ function Profile() {
    return (
     <div className="container">
       <div className="infoBox">
-        <img src="public/logo192.png"></img>
-      <h1>profile</h1>
+        <img src="asset/icon/melodico-logo.png"></img>
+      <h1>Profile</h1>
+      <h2>Nama</h2>
+      
+      <h2>Email</h2>
+
+      <h2>Role</h2>
+
+      <h2>Password</h2>
+
+      
 
       </div>
     </div>
