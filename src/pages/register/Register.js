@@ -10,7 +10,7 @@ function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,8 +29,11 @@ function Register() {
   }
 
   useEffect(() => {
-    if (!user) getUser();
-    else navigate("/");
+    getUser();
+
+    if (user) {
+      window.location = "/";
+    }
   }, [user]);
 
   return (

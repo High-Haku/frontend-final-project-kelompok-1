@@ -1,19 +1,19 @@
-import axios from "axios";
 import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "./navbar.css";
 
+import axios from "axios";
+
 function Navbar() {
   const navigate = useNavigate();
 
   async function logout() {
-    console.log("logout");
     await axios
-      .get("https://melodico.herokuapp.com/logout")
+      .delete("https://melodico.herokuapp.com/logout")
       .then((res) => {
         console.log(res);
-        navigate("/");
+        navigate("/login");
       })
       .catch((err) => console.log(err));
   }

@@ -17,7 +17,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(userLogin({ email, password }));
-   setDone(true)
+    setDone(true);
   };
 
   async function getUser() {
@@ -29,8 +29,11 @@ function Login() {
   }
 
   useEffect(() => {
-    if (!user) getUser();
-    else navigate("/");
+    getUser();
+
+    if (user) {
+      window.location = "/";
+    }
   }, [user]);
 
   return (
@@ -80,7 +83,9 @@ function Login() {
                       <b>Register</b>
                     </Link>
                   </p>
-                  <p>{done && "Login anda berhasil, selamat mendengarkan . . ."}</p>
+                  <p>
+                    {done && "Login anda berhasil, selamat mendengarkan . . ."}
+                  </p>
                 </div>
               </div>
             </form>

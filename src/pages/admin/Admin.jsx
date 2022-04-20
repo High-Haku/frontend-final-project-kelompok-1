@@ -29,7 +29,7 @@ function Admin() {
           </div>
         </Link>
 
-        <Link to="/admin/song" className="text-light">
+        <Link to="/admin/artist" className="text-light">
           <div className="menu-card">
             <div
               className="menu-card-background"
@@ -51,7 +51,7 @@ function Admin() {
           </div>
         </Link>
 
-        <Link to="/admin/song" className="text-light">
+        <Link to="/admin/album" className="text-light">
           <div className="menu-card">
             <div
               className="menu-card-background"

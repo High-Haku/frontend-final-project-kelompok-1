@@ -1,25 +1,18 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import "./home.css";
-import jwtDecode from "jwt-decode";
-import Loading from "../../components/Loading";
-
-// import jwtDecode from "jwt-decode";
-import { Dropdown } from "react-bootstrap";
 import moment from "moment";
+import { useEffect, useState } from "react";
+import { Dropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
+
+import "./home.css";
+
+import Loading from "../../components/Loading";
 
 function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [love, setLove] = useState(1)
-  const regex = /(?<=token=).*$/g;
-  const loginToken = regex.exec(document.cookie);
-  // const user = jwtDecode(loginToken[0])
-  // console.log(user);
-  // console.log(loginToken);
-  
+  const [love, setLove] = useState(1);
 
   const user = useSelector((state) => state.userReducer);
 
@@ -28,30 +21,32 @@ function Home() {
     try {
       setLoading(true);
       await axios
-      .post(
-        "http://localhost:3001/posting/",
-        {
-          content: update,
-          postedBy: "6255429d0b10cd13256b01c5"
-        },
-        { headers: { authorization: "Bearer " + loginToken } }
+        .post(
+          "https://melodico.herokuapp.com/posting/",
+          {
+            content: update,
+            postedBy: "6255429d0b10cd13256b01c5",
+            postDate: moment().format("YYMMDD, h:mm:ss"),
+          },
+          { headers: { authorization: "Bearer " + user.token } }
         )
         .then((res) => {
           console.log(res);
           getPost();
         });
-      } catch (error) {
-        console.log(error);
-      }
-      setLoading(false);
-      setUpdate("")
-    };
-    
-    const getPost = async () => {
-      const res = await axios.get("http://localhost:3001/posting/", { headers: { authorization: "Bearer " + loginToken } });
-      setPosting(res.data.data);
-      console.log(res.data.data);
-    };
+    } catch (error) {
+      console.log(error);
+    }
+    setLoading(false);
+    setUpdate("");
+  };
+
+  const getPost = async () => {
+    const res = await axios.get("https://melodico.herokuapp.com/posting/", {
+      headers: { authorization: "Bearer " + user.token },
+    });
+    setPosting(res.data.data);
+  };
 
   useEffect(() => {
     if (user) getPost();
@@ -59,9 +54,7 @@ function Home() {
 
   const deletePost = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/posting/${id}`, { headers: { authorization: "Bearer " + loginToken } });
-      console.log(id);
-      await axios.delete(`http://localhost:3001/posting/${id}`, {
+      await axios.delete(`https://melodico.herokuapp.com/posting/${id}`, {
         headers: { authorization: "Bearer " + user.token },
       });
       getPost();
@@ -70,23 +63,23 @@ function Home() {
     }
   };
 
-  const clickLove = async()=>{
+  const clickLove = async () => {
     try {
       await axios
-      .post(
-        "http://localhost:3001/posting/",
-        {
-          love: love
-        },
-        { headers: { authorization: "Bearer " + loginToken } }
+        .post(
+          "https://melodico.herokuapp.com/posting/",
+          {
+            love: love,
+          },
+          { headers: { authorization: "Bearer " + user.token } }
         )
         .then((res) => {
           console.log(res);
         });
-      } catch (error) {
-        console.log(error);
-      }
-  }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -134,7 +127,9 @@ function Home() {
             />
             <div className=" ms-1" style={{ display: "inline-block" }}>
               <p className="nama pt-3">Mukhammad Abdul mukhid</p>
-              <p style={{ color: "black", fontSize: "10px" }}>{ moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}</p>
+              <p style={{ color: "black", fontSize: "10px" }}>
+                {moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}
+              </p>
             </div>
             <div>
               <p className="ms-3 mt-1" style={{ color: "black" }}>
@@ -149,7 +144,7 @@ function Home() {
 
             {/* reaksi */}
             <div className="reaksi text-dark ms-4 me-4">
-              <ion-icon onClick={clickLove()}  name="heart-outline"></ion-icon>
+              <ion-icon onClick={clickLove} name="heart-outline"></ion-icon>
               <ion-icon name="chatbox-ellipses-outline"></ion-icon>
               <ion-icon name="share-social-outline"></ion-icon>
             </div>
