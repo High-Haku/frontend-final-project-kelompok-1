@@ -1,16 +1,23 @@
-.card-container {
+.artist-card-container {
   position: relative;
   width: 100%;
-  background-color: whitesmoke;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  grid-gap: 5px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-gap: 30px;
 }
 
-/* .card {
+.artist-card {
+  width: 100%;
+  text-align: center;
   cursor: pointer;
   transition: 1s cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+.artist-card img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
 }
 
 .card::after {
@@ -25,4 +32,4 @@
 
 .card:hover.card::after {
   opacity: 1;
-} */
+}
