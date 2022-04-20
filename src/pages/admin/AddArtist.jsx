@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
 import { useSelector } from "react-redux";
 
 function AddArtist() {
