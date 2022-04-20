@@ -18,7 +18,6 @@ import AddArtist from "./pages/AddArtist";
 
 function App() {
   return (
-    // <Home/>
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />}></Route>

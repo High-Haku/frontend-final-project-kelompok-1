@@ -1,6 +1,8 @@
-import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import setUserInfo from "../redux/actions/user.action";
 
 // Components ///
 import Navbar from "./Navbar";
@@ -11,20 +13,21 @@ import Sidebar from "./Sidebar";
 import "./layout.css";
 
 function Layout() {
-  const [userLogin, setUserLogin] = useState({});
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [user, setUser] = useState({});
 
   useEffect(() => {
-    const regex = /(?<=token=).*$/g;
-    const loginToken = regex.exec(document.cookie);
-
+    getUser();
     // check if user is login
-    if (loginToken) {
-      setUserLogin(jwtDecode(loginToken[0]));
-    } else {
-      navigate("/login");
-    }
+    if (!user) navigate("/login");
   }, []);
+
+  async function getUser() {
+    const res = await axios.get("https://melodico.herokuapp.com/token");
+    setUser(res.data);
+    dispatch(setUserInfo(res.data));
+  }
 
   //////////////////////////////////////
   return (

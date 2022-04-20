@@ -2,28 +2,34 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./home.css";
 import jwtDecode from "jwt-decode";
-import iconLike from "../../asset/icon/like.png";
-import iconComment from "../../asset/icon/comment.png";
-import iconShare from "../../asset/icon/share.png";
-import likeBlue from "../../asset/icon/like-blue.png";
+import Loading from "../../components/Loading";
+
+// import jwtDecode from "jwt-decode";
 import { Dropdown } from "react-bootstrap";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [love, setLove] = useState(1)
   const regex = /(?<=token=).*$/g;
   const loginToken = regex.exec(document.cookie);
   // const user = jwtDecode(loginToken[0])
   // console.log(user);
   // console.log(loginToken);
   
+
+  const user = useSelector((state) => state.userReducer);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       await axios
       .post(
-        "https://melodico.herokuapp.com/posting/",
+        "http://localhost:3001/posting/",
         {
           content: update,
           postedBy: "6255429d0b10cd13256b01c5"
@@ -37,34 +43,54 @@ function Home() {
       } catch (error) {
         console.log(error);
       }
+      setLoading(false);
+      setUpdate("")
     };
     
     const getPost = async () => {
-      const res = await axios.get("https://melodico.herokuapp.com/posting/", { headers: { authorization: "Bearer " + loginToken } });
+      const res = await axios.get("http://localhost:3001/posting/", { headers: { authorization: "Bearer " + loginToken } });
       setPosting(res.data.data);
       console.log(res.data.data);
     };
-    
 
   useEffect(() => {
-    getPost();
-  }, []);
+    if (user) getPost();
+  }, [user]);
 
   const deletePost = async (id) => {
     try {
-      await axios.delete(`https://melodico.herokuapp.com/posting/${id}`, { headers: { authorization: "Bearer " + loginToken } });
+      await axios.delete(`http://localhost:3001/posting/${id}`, { headers: { authorization: "Bearer " + loginToken } });
+      console.log(id);
+      await axios.delete(`http://localhost:3001/posting/${id}`, {
+        headers: { authorization: "Bearer " + user.token },
+      });
       getPost();
     } catch (error) {
       console.log(error);
     }
   };
 
-  // const getWaktu = ()=>{
-
-  // } 
+  const clickLove = async()=>{
+    try {
+      await axios
+      .post(
+        "http://localhost:3001/posting/",
+        {
+          love: love
+        },
+        { headers: { authorization: "Bearer " + loginToken } }
+        )
+        .then((res) => {
+          console.log(res);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+  }
 
   return (
     <div>
+      {loading ? <Loading /> : ""}
       <div className="updateLagu rounded-3">
         <img
           src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
@@ -115,17 +141,17 @@ function Home() {
                 {item.content}
               </p>
             </div>
-            <div className="hasil-reaksi ms-2 me-2">
-              <img src={likeBlue} alt="" />
+            <div className="hasil-reaksi text-danger ms-2 me-2">
+              <ion-icon name="heart"></ion-icon>
               <span>comment</span>
             </div>
             <hr style={{ color: "black" }} />
 
             {/* reaksi */}
             <div className="reaksi text-dark ms-4 me-4">
-            <ion-icon  name="heart-outline"></ion-icon>
-              <img src={iconComment} alt="" />
-              <img src={iconShare} alt="" />
+              <ion-icon onClick={clickLove()}  name="heart-outline"></ion-icon>
+              <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+              <ion-icon name="share-social-outline"></ion-icon>
             </div>
             <div></div>
           </div>

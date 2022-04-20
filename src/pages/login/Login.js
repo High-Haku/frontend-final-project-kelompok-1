@@ -4,25 +4,34 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../asset/melodico.png";
 import "./login.css";
 import { userLogin } from "../../redux/actions/register&login.action";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState({});
+  const [done, setDone] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(userLogin({ email, password }));
+   setDone(true)
   };
 
-  useEffect(() => {
-    const regex = /(?<=token=).*$/g;
-    const loginToken = regex.exec(document.cookie);
+  async function getUser() {
+    const userLogin = await axios
+      .get("https://melodico.herokuapp.com/token")
+      .catch((err) => console.log(err));
 
-    // check if user is login
-    if (loginToken) navigate("/");
-  }, []);
+    setUser(userLogin);
+  }
+
+  useEffect(() => {
+    if (!user) getUser();
+    else navigate("/");
+  }, [user]);
 
   return (
     <div>
@@ -71,6 +80,7 @@ function Login() {
                       <b>Register</b>
                     </Link>
                   </p>
+                  <p>{done && "Login anda berhasil, selamat mendengarkan . . ."}</p>
                 </div>
               </div>
             </form>
