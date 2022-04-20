@@ -4,11 +4,13 @@ import logo from "../../asset/melodico.png";
 import "./register.css";
 import { userRegister } from "../../redux/actions/register&login.action";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [user, setUser] = useState({});
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -18,13 +20,18 @@ function Register() {
     dispatch(userRegister({ name: name, email: email, password: password }));
   };
 
-  useEffect(() => {
-    const regex = /(?<=token=).*$/g;
-    const loginToken = regex.exec(document.cookie);
+  async function getUser() {
+    const userLogin = await axios
+      .get("https://melodico.herokuapp.com/token")
+      .catch((err) => console.log(err));
 
-    // check if user is login
-    if (loginToken) navigate("/");
-  }, []);
+    setUser(userLogin);
+  }
+
+  useEffect(() => {
+    if (!user) getUser();
+    else navigate("/");
+  }, [user]);
 
   return (
     <div>

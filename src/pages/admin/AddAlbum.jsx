@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
-import Loading from "../components/Loading";
+import Loading from "../../components/Loading";
+import { useSelector } from "react-redux";
 
-function AddSong() {
+function AddAlbum() {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const regex = /(?<=token=).*$/g;
-  const loginToken = regex.exec(document.cookie);
-
+  const [artist, setArtist] = useState("");
   const [artistList, setArtistList] = useState([]);
+  const [songList, setsongList] = useState([]);
+
+  const user = useSelector((state) => state.userReducer);
 
   useEffect(() => {
-    getArtist();
-  }, []);
+    if (user) getArtist();
+  }, [user]);
 
   async function getArtist() {
     const res = await axios
       .get("https://melodico.herokuapp.com/artists", {
-        headers: { authorization: "Bearer " + loginToken },
+        headers: { authorization: "Bearer " + user.token },
       })
       .catch((err) => {
         console.log(err);
@@ -40,11 +42,8 @@ function AddSong() {
 
     setLoading(true);
     await axios
-      .post("https://melodico.herokuapp.com/songs", data, {
-        headers: {
-          authorization: "Bearer " + loginToken,
-          "Content-Type": "multipart/form-data",
-        },
+      .post("https://melodico.herokuapp.com/albums", data, {
+        headers: { authorization: "Bearer " + user.token },
       })
       .then((res) => {
         console.log(res);
@@ -55,27 +54,25 @@ function AddSong() {
         console.log(err);
         alert("error");
       });
-    setLoading(false);
 
+    setLoading(false);
     e.target.reset();
   }
 
   return (
     <>
       {loading ? <Loading /> : ""}
-      <h2>Add New Song</h2>
+      <h2>Add New Album</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>
-            Title <span className="text-warning">*</span>
+            Album Name <span className="text-warning">*</span>
           </Form.Label>
           <Form.Control
             type="text"
             required
-            placeholder="song title"
-            onChange={(e) =>
-              setFormData({ ...formData, title: e.target.value })
-            }
+            placeholder="Album Title..."
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </Form.Group>
 
@@ -85,9 +82,10 @@ function AddSong() {
           </Form.Label>
           <Form.Select
             required
-            onChange={(e) =>
-              setFormData({ ...formData, artist: e.target.value })
-            }
+            onChange={(e) => {
+              setFormData({ ...formData, artist: e.target.value });
+              setArtist(e.target.value);
+            }}
           >
             <option></option>
             <>
@@ -100,56 +98,33 @@ function AddSong() {
           </Form.Select>
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>
-            Genre <span className="text-warning">*</span>
-          </Form.Label>
-          <Form.Control
-            type="text"
-            required
-            placeholder="song genre"
+        <Form.Group className="mb-3">
+          <Form.Label>Songs</Form.Label>
+          <Form.Select
             onChange={(e) =>
-              setFormData({ ...formData, genre: e.target.value })
+              setFormData({ ...formData, songs: e.target.value })
             }
-          />
+          >
+            <option></option>
+            {songList.map((list) => (
+              <option key={list["_id"]} value={list["_id"]}>
+                {list.name}
+              </option>
+            ))}
+          </Form.Select>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>
-            Release Date <span className="text-warning">*</span>
-          </Form.Label>
-          <Form.Control
-            type="date"
-            required
-            placeholder="release date"
-            onChange={(e) =>
-              setFormData({ ...formData, releaseDate: e.target.value })
-            }
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Video (youtube url)</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="song video"
-            onChange={(e) =>
-              setFormData({ ...formData, videoUrl: e.target.value })
-            }
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>
-            MP3 / WAV File (max. 8MB) <span className="text-warning">*</span>
+            Cover Image (max 2MB) <span className="text-warning">*</span>
           </Form.Label>
           <Form.Control
             type="file"
             required
-            accept=".mp3 ,.wav"
+            accept=".jpg,.jpeg,.png"
             placeholder="song video"
             onChange={(e) =>
-              setFormData({ ...formData, file: e.target.files[0] })
+              setFormData({ ...formData, image: e.target.files[0] })
             }
           />
         </Form.Group>
@@ -162,4 +137,4 @@ function AddSong() {
   );
 }
 
-export default AddSong;
+export default AddAlbum;

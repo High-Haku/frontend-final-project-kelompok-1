@@ -1,32 +1,31 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./home.css";
+
 // import jwtDecode from "jwt-decode";
 import iconLike from "../../asset/icon/like.png";
 import iconComment from "../../asset/icon/comment.png";
 import iconShare from "../../asset/icon/share.png";
 import likeBlue from "../../asset/icon/like-blue.png";
 import { Dropdown } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
-  const regex = /(?<=token=).*$/g;
-  const loginToken = regex.exec(document.cookie);
-  // const user = jwtDecode(loginToken)
-  // // console.log(user);
-  // // console.log(loginToken);
+
+  const user = useSelector((state) => state.userReducer);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios
         .post(
-          "http://localhost:3001/posting/",
+          "https://melodico.herokuapp.com/posting/",
           {
             content: update,
           },
-          { headers: { authorization: "Bearer " + loginToken } }
+          { headers: { authorization: "Bearer " + user.token } }
         )
         .then((res) => {
           console.log(res);
@@ -38,19 +37,23 @@ function Home() {
   };
 
   const getPost = async () => {
-    const res = await axios.get("http://localhost:3001/posting/");
+    const res = await axios.get("https://melodico.herokuapp.com/posting/", {
+      headers: { authorization: "Bearer " + user.token },
+    });
     setPosting(res.data.data);
     console.log(res.data.data);
   };
 
   useEffect(() => {
-    getPost();
-  }, []);
+    if (user) getPost();
+  }, [user]);
 
   const deletePost = async (id) => {
     try {
       console.log(id);
-      await axios.delete(`http://localhost:3001/posting/${id}`);
+      await axios.delete(`https://melodico.herokuapp.com/posting/${id}`, {
+        headers: { authorization: "Bearer " + user.token },
+      });
       getPost();
     } catch (error) {
       console.log(error);
@@ -89,10 +92,7 @@ function Home() {
               ></Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item
-                  href="#/action-1"
-                  onClick={() => deletePost(item["_id"])}
-                >
+                <Dropdown.Item onClick={() => deletePost(item["_id"])}>
                   Hapus
                 </Dropdown.Item>
                 <Dropdown.Item href="#/action-2">Sembunyikan</Dropdown.Item>
