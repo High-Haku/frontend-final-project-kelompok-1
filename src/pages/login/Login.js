@@ -10,12 +10,14 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState({});
+  const [done, setDone] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(userLogin({ email, password }));
+   setDone(true)
   };
 
   async function getUser() {
@@ -78,6 +80,7 @@ function Login() {
                       <b>Register</b>
                     </Link>
                   </p>
+                  <p>{done && "Login anda berhasil, selamat mendengarkan . . ."}</p>
                 </div>
               </div>
             </form>

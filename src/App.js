@@ -21,7 +21,6 @@ import CreatePlaylist from "./pages/createPlaylist/CreatePlaylist";
 
 function App() {
   return (
-    // <Home/>
     <Routes>
       <Route path="/" element={<Layout />}>
         add/
