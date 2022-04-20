@@ -76,7 +76,7 @@
     display: flex;
     justify-content: space-between;
 }
-.reaksi img {
-    width: 30px;
-    height: 30px;
+.reaksi .ion-icon {
+    width: 50px;
+    height: 50px;
 }
