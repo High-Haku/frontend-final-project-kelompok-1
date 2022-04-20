@@ -37,22 +37,28 @@ function Sidebar() {
             <span className="ms-3 d-inline-block">Browse</span>
           </Link>
         </li>
-        <li id="song" className="menu px-3 d-flex align-items-center p-2">
-          <Link to="/song" onClick={(e) => changeMenuStyle(e.target)}>
+        <li id="favourites" className="menu px-3 d-flex align-items-center p-2">
+          <Link to="/favourites" onClick={(e) => changeMenuStyle(e.target)}>
             <ion-icon name="musical-notes"></ion-icon>
-            <span className="ms-3 d-inline-block">Song</span>
+            <span className="ms-3 d-inline-block">Favourites</span>
           </Link>
         </li>
-        <li id="album" className="menu px-3 d-flex align-items-center p-2">
-          <Link to="/album" onClick={(e) => changeMenuStyle(e.target)}>
+        <li
+          id="create-playlist"
+          className="menu px-3 d-flex align-items-center p-2"
+        >
+          <Link
+            to="/create-playlist"
+            onClick={(e) => changeMenuStyle(e.target)}
+          >
             <ion-icon name="albums"></ion-icon>
-            <span className="ms-3 d-inline-block">Album</span>
+            <span className="ms-3 d-inline-block">Create Playlist</span>
           </Link>
         </li>
-        <li id="artist" className="menu px-3 d-flex align-items-center p-2">
-          <Link to="/artist" onClick={(e) => changeMenuStyle(e.target)}>
-            <ion-icon name="star"></ion-icon>
-            <span className="ms-3 d-inline-block">Artist</span>
+        <li id="admin" className="menu px-3 d-flex align-items-center p-2">
+          <Link to="/admin" onClick={(e) => changeMenuStyle(e.target)}>
+            <ion-icon name="build"></ion-icon>
+            <span className="ms-3 d-inline-block">Admin</span>
           </Link>
         </li>
       </ul>
