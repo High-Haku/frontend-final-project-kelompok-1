@@ -1,4 +1,6 @@
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import "./home.css";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
@@ -12,6 +14,8 @@ function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
   const [loading, setLoading] = useState(false);
+
+
   const [love, setLove] = useState(1);
 
   const user = useSelector((state) => state.userReducer);
@@ -48,6 +52,7 @@ function Home() {
     setPosting(res.data.data);
   };
 
+
   useEffect(() => {
     if (user) getPost();
   }, [user]);
@@ -62,6 +67,7 @@ function Home() {
       console.log(error);
     }
   };
+
 
   const clickLove = async () => {
     try {
@@ -80,6 +86,7 @@ function Home() {
       console.log(error);
     }
   };
+
 
   return (
     <div>
@@ -144,7 +151,9 @@ function Home() {
 
             {/* reaksi */}
             <div className="reaksi text-dark ms-4 me-4">
+
               <ion-icon onClick={clickLove} name="heart-outline"></ion-icon>
+
               <ion-icon name="chatbox-ellipses-outline"></ion-icon>
               <ion-icon name="share-social-outline"></ion-icon>
             </div>
