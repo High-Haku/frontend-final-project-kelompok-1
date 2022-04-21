@@ -15,16 +15,19 @@ import "./layout.css";
 function Layout() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(undefined);
 
   useEffect(() => {
-    getUser();
-    // check if user is login
-    if (!user) navigate("/login");
-  }, []);
+    if (!user) getUser();
+  }, [user]);
 
   async function getUser() {
-    const res = await axios.get("https://melodico.herokuapp.com/token");
+    const res = await axios
+      .get("https://melodico.herokuapp.com/token")
+      .catch((err) => {
+        console.log(err);
+        navigate("/login");
+      });
     setUser(res.data);
     dispatch(setUserInfo(res.data));
   }
@@ -50,6 +53,6 @@ function Layout() {
       </div>
     </>
   );
-}
+            }
 
 export default Layout;

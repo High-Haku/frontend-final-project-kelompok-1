@@ -1,7 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./upgrade.css";
 
 function Upgrade() {
+
+  const navigate = useNavigate()
+
+  const handleClick = () =>{
+    navigate('/pembayaran')
+  }
   return (
     <div>
       <div className="container">
@@ -16,30 +23,30 @@ function Upgrade() {
           </div>
         </div>
 
-        <div className="paket mt-5">
-            <h3>Pilih Paket Premium</h3>
-          <div className="card">
+        <div className="paket mt-5" style={{ color: "black" }}>
+          <h3 style={{ color: "white" }}>Pilih Paket Premium</h3>
+          <div className="card" onClick={handleClick}>
             <div className="header">
               <p>1 Bulan cuma 10.000</p>
             </div>
             <p>Untuk pertamakali Upgrade</p>
             <hr />
           </div>
-          <div className="card">
+          <div className="card" onClick={handleClick}>
             <div className="header">
               <p>1 Bulan cuma 50.000</p>
             </div>
             <p>Paket individu untuk 1 akun</p>
             <hr />
           </div>
-          <div className="card">
+          <div className="card" onClick={handleClick}>
             <div className="header">
               <p>1 Bulan cuma 80.000</p>
             </div>
             <p>Paket Duo untuk 2 akun</p>
             <hr />
           </div>
-          <div className="card">
+          <div className="card" onClick={handleClick}>
             <div className="header">
               <p>1 Bulan cuma 100.000</p>
             </div>

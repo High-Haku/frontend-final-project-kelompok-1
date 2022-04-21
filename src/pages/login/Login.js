@@ -9,7 +9,7 @@ import axios from "axios";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(false);
   const [done, setDone] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(userLogin({ email, password }));
-   setDone(true)
+    setDone(true);
   };
 
   async function getUser() {
@@ -29,8 +29,11 @@ function Login() {
   }
 
   useEffect(() => {
-    if (!user) getUser();
+    getUser();
 
+    if (user) {
+      window.location = "/";
+    }
   }, [user]);
 
   return (
@@ -80,7 +83,9 @@ function Login() {
                       <b>Register</b>
                     </Link>
                   </p>
-                  <p>{done && "Login anda berhasil, selamat mendengarkan . . ."}</p>
+                  <p>
+                    {done && "Login anda berhasil, selamat mendengarkan . . ."}
+                  </p>
                 </div>
               </div>
             </form>
