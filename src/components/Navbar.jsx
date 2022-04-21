@@ -78,8 +78,15 @@ function Navbar() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item><Link to="/profile">Akun</Link></Dropdown.Item>
-                  <Dropdown.Item onClick={logout}>Keluar</Dropdown.Item>
+                  <Dropdown.Item>
+                    <Link
+                      to="/profile"
+                      style={{ textDecoration: "none", color: "black" }}
+                    >
+                      My Account
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </div>

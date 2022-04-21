@@ -1,11 +1,13 @@
 import React from "react";
 import { Table } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { playNow } from "../redux/actions/playback.action";
+import { addToMyFavorite } from "../redux/actions/user.action";
 import "./songTable.css";
 
 function SongTable({ songsList }) {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.userReducer);
   return (
     <div className="songs-container my-3">
       <h3 className="mb-4">Songs</h3>
@@ -54,7 +56,12 @@ function SongTable({ songsList }) {
                       )
                     }
                   ></ion-icon>
-                  <ion-icon name="heart-outline"></ion-icon>
+                  <ion-icon
+                    name="heart-outline"
+                    onClick={() =>
+                      dispatch(addToMyFavorite(song._id, user.token, user.id))
+                    }
+                  ></ion-icon>
                   <ion-icon name="ellipsis-horizontal"></ion-icon>
                 </div>
               </td>

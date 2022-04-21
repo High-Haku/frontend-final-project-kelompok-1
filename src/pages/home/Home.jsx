@@ -5,6 +5,7 @@ import Loading from "../../components/Loading";
 import { Dropdown } from "react-bootstrap";
 import moment from "moment";
 import { useSelector } from "react-redux";
+import ad from "../../asset/ad.png";
 
 import { Link } from "react-router-dom";
 
@@ -46,6 +47,7 @@ function Home() {
     const res = await axios.get("https://melodico.herokuapp.com/posting/", {
       headers: { authorization: "Bearer " + user.token },
     });
+    console.log(res.data.data);
     setPosting(res.data.data);
     setLoading(false);
   };
@@ -83,6 +85,10 @@ function Home() {
     }
   };
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   return (
     <div className="container flex-column">
       {loading ? <Loading /> : ""}
@@ -92,30 +98,28 @@ function Home() {
         </div>
         <div className="overlay m-auto"></div>
       </header>
-      <section className="d-flex">
-        <main>
+      <div className="row w-100">
+        <div className="col-lg-8 p-0 d-flex flex-column align-items-center">
           <div className="updateLagu rounded-3">
             <img
-              src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-              alt=""
+              src={`https://melodico.herokuapp.com/images/${user.image}`}
+              alt={user.name}
             />
             <form onSubmit={handleSubmit}>
+              <span>Share Your Melody !</span>
               <input
-                className="ms-1 rounded-3"
                 type="text"
                 value={update}
                 onChange={(e) => setUpdate(e.target.value)}
               />
-              <button className="ms-1 rounded-3" type="submit">
-                Send
-              </button>
+              <button type="submit">Send</button>
             </form>
           </div>
 
           {/* Posting */}
-          <div>
+          <div className="get-update-container d-flex flex-column align-items-center">
             {posting.map((item) => (
-              <div className="getUpdate mt-1 rounded-3" key={item._id}>
+              <div className="getUpdate mt-1 rounded-3 me-0" key={item._id}>
                 <Dropdown style={{ float: "right" }}>
                   <Dropdown.Toggle
                     variant="none"
@@ -130,40 +134,38 @@ function Home() {
                     <Dropdown.Item>Sembunyikan</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
-                <img
-                  className="ms-1"
-                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-                  alt=""
-                />
-                <div className=" ms-1" style={{ display: "inline-block" }}>
-                  <p className="nama pt-3">Mukhammad Abdul mukhid</p>
-                  <p style={{ color: "black", fontSize: "10px" }}>
-                    {moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}
-                  </p>
+                <div className="d-flex align-items-center gap-3">
+                  <img
+                    src={`https://melodico.herokuapp.com/images/${user.image}`}
+                    alt={user.name}
+                  />
+                  <div style={{ display: "inline-block" }}>
+                    <p className="nama">{capitalizeFirstLetter(user.name)}</p>
+                    <p
+                      className="p-0 m-0"
+                      style={{ color: "black", fontSize: "10px" }}
+                    >
+                      {moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}
+                    </p>
+                  </div>
                 </div>
                 <div>
-                  <p className="ms-3 mt-1" style={{ color: "black" }}>
+                  <p className="my-2 mx-2" style={{ color: "black" }}>
                     {item.content}
                   </p>
                 </div>
-                <div className="hasil-reaksi text-danger ms-2 me-2">
-                  <ion-icon name="heart"></ion-icon>
-                  <span>comment</span>
-                </div>
-                <hr style={{ color: "black" }} />
-
-                {/* reaksi */}
-                <div className="reaksi text-dark ms-4 me-4">
+                <div className="love-icon mx-1">
                   <ion-icon onClick={clickLove} name="heart-outline"></ion-icon>
-                  <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-                  <ion-icon name="share-social-outline"></ion-icon>
                 </div>
               </div>
             ))}
           </div>
-        </main>
-        <aside></aside>
-      </section>
+        </div>
+        <div className="sidebar col-lg-4" style={{ zIndex: 0 }}>
+          <h5 className="m-0">People You Might Know</h5>
+          <hr className="my-2 mx-0" />
+        </div>
+      </div>
     </div>
   );
 }
