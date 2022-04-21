@@ -6,13 +6,12 @@ import { Dropdown } from "react-bootstrap";
 import moment from "moment";
 import { useSelector } from "react-redux";
 
-import "./home.css";
-
+import { Link } from "react-router-dom";
 
 function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [love, setLove] = useState(1);
 
   const user = useSelector((state) => state.userReducer);
@@ -43,10 +42,12 @@ function Home() {
   };
 
   const getPost = async () => {
+    setLoading(true);
     const res = await axios.get("https://melodico.herokuapp.com/posting/", {
       headers: { authorization: "Bearer " + user.token },
     });
     setPosting(res.data.data);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -83,78 +84,86 @@ function Home() {
   };
 
   return (
-    <div>
+    <div className="container flex-column">
       {loading ? <Loading /> : ""}
-      <div className="updateLagu rounded-3">
-        <img
-          src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-          alt=""
-        />
-        <form onSubmit={handleSubmit}>
-          <input
-            className="ms-1 rounded-3"
-            type="text"
-            value={update}
-            onChange={(e) => setUpdate(e.target.value)}
-          />
-          <button className="ms-1 rounded-3" type="submit">
-            Send
-          </button>
-        </form>
-      </div>
-
-      {/* Posting */}
-      <div>
-        {posting.map((item) => (
-          <div className="getUpdate mt-1 rounded-3" key={item._id}>
-            <Dropdown style={{ float: "right" }}>
-              <Dropdown.Toggle
-                variant="none"
-                id="dropdown-basic"
-                style={{ heigth: "40px", border: "none", outline: "none" }}
-              ></Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => deletePost(item["_id"])}>
-                  Hapus
-                </Dropdown.Item>
-                <Dropdown.Item>Sembunyikan</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
+      <header className="shadow d-flex">
+        <div className="header-content">
+          <h1>It's more than music!</h1>
+        </div>
+        <div className="overlay m-auto"></div>
+      </header>
+      <section className="d-flex">
+        <main>
+          <div className="updateLagu rounded-3">
             <img
-              className="ms-1"
               src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
               alt=""
             />
-            <div className=" ms-1" style={{ display: "inline-block" }}>
-              <p className="nama pt-3">Mukhammad Abdul mukhid</p>
-              <p style={{ color: "black", fontSize: "10px" }}>
-                {moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}
-              </p>
-            </div>
-            <div>
-              <p className="ms-3 mt-1" style={{ color: "black" }}>
-                {item.content}
-              </p>
-            </div>
-            <div className="hasil-reaksi text-danger ms-2 me-2">
-              <ion-icon name="heart"></ion-icon>
-              <span>comment</span>
-            </div>
-            <hr style={{ color: "black" }} />
-
-            {/* reaksi */}
-            <div className="reaksi text-dark ms-4 me-4">
-
-              <ion-icon onClick={clickLove} name="heart-outline"></ion-icon>
-
-              <ion-icon name="chatbox-ellipses-outline"></ion-icon>
-              <ion-icon name="share-social-outline"></ion-icon>
-            </div>
-            <div></div>
+            <form onSubmit={handleSubmit}>
+              <input
+                className="ms-1 rounded-3"
+                type="text"
+                value={update}
+                onChange={(e) => setUpdate(e.target.value)}
+              />
+              <button className="ms-1 rounded-3" type="submit">
+                Send
+              </button>
+            </form>
           </div>
-        ))}
-      </div>
+
+          {/* Posting */}
+          <div>
+            {posting.map((item) => (
+              <div className="getUpdate mt-1 rounded-3" key={item._id}>
+                <Dropdown style={{ float: "right" }}>
+                  <Dropdown.Toggle
+                    variant="none"
+                    id="dropdown-basic"
+                    style={{ heigth: "40px", border: "none", outline: "none" }}
+                  ></Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => deletePost(item["_id"])}>
+                      Hapus
+                    </Dropdown.Item>
+                    <Dropdown.Item>Sembunyikan</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <img
+                  className="ms-1"
+                  src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
+                  alt=""
+                />
+                <div className=" ms-1" style={{ display: "inline-block" }}>
+                  <p className="nama pt-3">Mukhammad Abdul mukhid</p>
+                  <p style={{ color: "black", fontSize: "10px" }}>
+                    {moment(item.postDate, "YYMMDD, h:mm:ss").fromNow()}
+                  </p>
+                </div>
+                <div>
+                  <p className="ms-3 mt-1" style={{ color: "black" }}>
+                    {item.content}
+                  </p>
+                </div>
+                <div className="hasil-reaksi text-danger ms-2 me-2">
+                  <ion-icon name="heart"></ion-icon>
+                  <span>comment</span>
+                </div>
+                <hr style={{ color: "black" }} />
+
+                {/* reaksi */}
+                <div className="reaksi text-dark ms-4 me-4">
+                  <ion-icon onClick={clickLove} name="heart-outline"></ion-icon>
+                  <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+                  <ion-icon name="share-social-outline"></ion-icon>
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
+        <aside></aside>
+      </section>
     </div>
   );
 }
