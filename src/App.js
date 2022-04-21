@@ -18,6 +18,7 @@ import AddArtist from "./pages/admin/AddArtist";
 import Admin from "./pages/admin/Admin";
 import Favourites from "./pages/favourites/Favourites";
 import CreatePlaylist from "./pages/createPlaylist/CreatePlaylist";
+import Checkout from "./pages/checkout/Checkout";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/admin/song" element={<AddSong />}></Route>
         <Route path="/admin/album" element={<AddAlbum />}></Route>
         <Route path="/admin/artist" element={<AddArtist />}></Route>
+        <Route path="/pembayaran" element={<Checkout/>}/>
       </Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/register" element={<Register />}></Route>

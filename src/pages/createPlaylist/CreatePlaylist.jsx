@@ -8,7 +8,6 @@ function CreatePlaylist() {
   const [tambahLagu, setTambahLagu] = useState("");
   const [dataLagu, setDataLagu] = useState([]);
   const [laguku, setLaguku] = useState([]);
-  const [deleteLaguku, setDeleteLaguku] = useState([]);
   const user = useSelector((state) => state.userReducer);
   useEffect(() => {
     if (user) {
@@ -26,9 +25,6 @@ function CreatePlaylist() {
     });
   }, [dataLagu]);
 
-  // useEffect(()=>{
-  //   deletePlayList()
-  // },[laguku])
 
   const getLagu = async () => {
     const result = await axios.get("https://melodico.herokuapp.com/songs", {
@@ -44,12 +40,17 @@ function CreatePlaylist() {
     setDataLagu([...dataLagu, tambahLagu]);
     console.log(tambahLagu);
   };
-  console.log(laguku);
 
-  // const deletePlayList = (e) =>{
-  //   setDeleteLaguku([...deleteLaguku, laguku])
+  const postLaguku = async(e)=>{
+    try {
+        await axios.post('https://melodico.herokuapp.com/playlists', {
+          songs : laguku
+        })
 
-  // }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
   return (
     <div>
@@ -88,7 +89,7 @@ function CreatePlaylist() {
                     <td
                       onClick={(e) =>
                         setLaguku(
-                          laguku.slice(laguku.indexOf(e.target.index, 1))
+                          laguku.slice(laguku.indexOf(e.target.index))
                         )
                       }
                     >

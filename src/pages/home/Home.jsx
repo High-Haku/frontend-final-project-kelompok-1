@@ -1,21 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./home.css";
-import moment from "moment";
-import { useEffect, useState } from "react";
+import Loading from "../../components/Loading";
 import { Dropdown } from "react-bootstrap";
+import moment from "moment";
 import { useSelector } from "react-redux";
 
 import "./home.css";
 
-import Loading from "../../components/Loading";
 
 function Home() {
   const [update, setUpdate] = useState("");
   const [posting, setPosting] = useState([]);
   const [loading, setLoading] = useState(false);
-
-
   const [love, setLove] = useState(1);
 
   const user = useSelector((state) => state.userReducer);
@@ -52,7 +49,6 @@ function Home() {
     setPosting(res.data.data);
   };
 
-
   useEffect(() => {
     if (user) getPost();
   }, [user]);
@@ -67,7 +63,6 @@ function Home() {
       console.log(error);
     }
   };
-
 
   const clickLove = async () => {
     try {
@@ -86,7 +81,6 @@ function Home() {
       console.log(error);
     }
   };
-
 
   return (
     <div>
