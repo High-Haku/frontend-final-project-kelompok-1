@@ -78,7 +78,7 @@ function Navbar() {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item>Akun</Dropdown.Item>
+                  <Dropdown.Item><Link to="/profile">Akun</Link></Dropdown.Item>
                   <Dropdown.Item onClick={logout}>Keluar</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
