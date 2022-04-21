@@ -30,7 +30,7 @@ function Login() {
 
   useEffect(() => {
     if (!user) getUser();
-    else navigate("/");
+
   }, [user]);
 
   return (

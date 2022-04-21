@@ -1,10 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import "./home.css";
-import jwtDecode from "jwt-decode";
 import Loading from "../../components/Loading";
 
-// import jwtDecode from "jwt-decode";
 import { Dropdown } from "react-bootstrap";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -14,11 +12,8 @@ function Home() {
   const [posting, setPosting] = useState([]);
   const [loading, setLoading] = useState(false);
   const [love, setLove] = useState(1)
-  const regex = /(?<=token=).*$/g;
-  const loginToken = regex.exec(document.cookie);
-  // const user = jwtDecode(loginToken[0])
-  // console.log(user);
-  // console.log(loginToken);
+
+
   
 
   const user = useSelector((state) => state.userReducer);
@@ -29,12 +24,12 @@ function Home() {
       setLoading(true);
       await axios
       .post(
-        "http://localhost:3001/posting/",
+        "https://melodico.herokuapp.com/posting/",
         {
           content: update,
           postedBy: "6255429d0b10cd13256b01c5"
         },
-        { headers: { authorization: "Bearer " + loginToken } }
+        { headers: { authorization: "Bearer " + user.token } }
         )
         .then((res) => {
           console.log(res);
@@ -48,7 +43,8 @@ function Home() {
     };
     
     const getPost = async () => {
-      const res = await axios.get("http://localhost:3001/posting/", { headers: { authorization: "Bearer " + loginToken } });
+      const res = await axios.get("https://melodico.herokuapp.com/posting/", 
+      { headers: { authorization: "Bearer " + user.token } });
       setPosting(res.data.data);
       console.log(res.data.data);
     };
@@ -59,9 +55,8 @@ function Home() {
 
   const deletePost = async (id) => {
     try {
-      await axios.delete(`http://localhost:3001/posting/${id}`, { headers: { authorization: "Bearer " + loginToken } });
       console.log(id);
-      await axios.delete(`http://localhost:3001/posting/${id}`, {
+      await axios.delete(`https://melodico.herokuapp.com/posting/${id}`, {
         headers: { authorization: "Bearer " + user.token },
       });
       getPost();
@@ -70,23 +65,6 @@ function Home() {
     }
   };
 
-  const clickLove = async()=>{
-    try {
-      await axios
-      .post(
-        "http://localhost:3001/posting/",
-        {
-          love: love
-        },
-        { headers: { authorization: "Bearer " + loginToken } }
-        )
-        .then((res) => {
-          console.log(res);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-  }
 
   return (
     <div>
@@ -149,7 +127,7 @@ function Home() {
 
             {/* reaksi */}
             <div className="reaksi text-dark ms-4 me-4">
-              <ion-icon onClick={clickLove()}  name="heart-outline"></ion-icon>
+              <ion-icon name="heart-outline"></ion-icon>
               <ion-icon name="chatbox-ellipses-outline"></ion-icon>
               <ion-icon name="share-social-outline"></ion-icon>
             </div>
