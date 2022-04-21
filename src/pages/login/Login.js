@@ -9,7 +9,7 @@ import axios from "axios";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(false);
   const [done, setDone] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
