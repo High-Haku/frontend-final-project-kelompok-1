@@ -4,14 +4,15 @@ import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import LoadingSection from "../../components/LoadingSection";
-import SongTable from "../../components/SongTable";
 import { playNow } from "../../redux/actions/playback.action";
+import { addToMyFavorite } from "../../redux/actions/user.action";
 
 import "./artistPage.css";
 
 function ArtistPage() {
   const { id } = useParams();
   const [artistData, setArtistData] = useState([]);
+  const [songsList, setSongsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ function ArtistPage() {
     console.log(artist.data);
 
     setArtistData(artist.data.data);
+    setSongsList(artist.data.data.songs);
     setLoading(false);
   }
   return (
@@ -71,38 +73,47 @@ function ArtistPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>
-                      <span
-                        style={{ height: "50px" }}
-                        className="d-flex justify-content-center align-items-center fw-bold"
-                      >
-                        1
-                      </span>
-                    </td>
-                    <td className="table-song-content d-flex gap-3">
-                      <div className="table-song-title">
-                        <p>Song Name</p>
-                        <span>Album Name</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="table-song-action d-flex gap-2 justify-content-center align-items-center">
-                        <ion-icon
-                          name="play"
-                          //   onClick={() =>
-                          //     dispatch(
-                          //       playNow(
-                          //         `https://melodico.herokuapp.com/music/${song.file}`
-                          //       )
-                          //     )
-                          //   }
-                        ></ion-icon>
-                        <ion-icon name="heart-outline"></ion-icon>
-                        <ion-icon name="ellipsis-horizontal"></ion-icon>
-                      </div>
-                    </td>
-                  </tr>
+                  {songsList.map((song, index) => (
+                    <tr key={index}>
+                      <td>
+                        <span
+                          style={{ height: "50px" }}
+                          className="d-flex justify-content-center align-items-center fw-bold"
+                        >
+                          {index + 1}
+                        </span>
+                      </td>
+                      <td className="table-song-content d-flex gap-3">
+                        <div className="table-song-title">
+                          <p>{song.title}</p>
+                          <span>Album Name</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="table-song-action d-flex gap-2 justify-content-center align-items-center">
+                          <ion-icon
+                            name="play"
+                            onClick={() =>
+                              dispatch(
+                                playNow(
+                                  `https://melodico.herokuapp.com/music/${song.file}`
+                                )
+                              )
+                            }
+                          ></ion-icon>
+                          <ion-icon
+                            name="heart-outline"
+                            onClick={() =>
+                              dispatch(
+                                addToMyFavorite(song._id, user.token, user.id)
+                              )
+                            }
+                          ></ion-icon>
+                          <ion-icon name="ellipsis-horizontal"></ion-icon>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </div>

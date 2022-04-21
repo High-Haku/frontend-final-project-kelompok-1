@@ -1,5 +1,5 @@
 header {
-  width: 90%;
+  width: 100%;
   height: 300px;
   margin: 20px auto 40px auto;
   overflow: hidden;
@@ -47,45 +47,69 @@ header .overlay {
 }
 
 .updateLagu {
-  width: 500px;
-  height: 130px;
-  background-color: yellow;
+  width: 80%;
+  max-width: 800px;
+  min-width: 450px;
+  height: 100px;
+  background-color: #ffe500;
+  margin-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .updateLagu img {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  aspect-ratio: 1/1;
   border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.updateLagu form {
+  width: 75%;
+  color: black;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.updateLagu span {
+  font-size: 14px;
 }
 
 .updateLagu input {
-  width: 300px;
-  height: 50px;
+  position: relative;
   border: none;
   outline: none;
+  border-radius: 3px;
+  padding: 3px 15px;
+  width: 77%;
+  color: #1f2127;
 }
 
 .updateLagu button {
-  width: 60px;
-  height: 50px;
   border: none;
   outline: none;
-  background-color: black;
+  background-color: #1f2127;
   color: aliceblue;
-  font-weight: bolder;
+  padding: 5px 10px;
+  border-radius: 3px;
+  margin-left: 10px;
+}
+
+.get-update-container {
+  width: 80%;
+  max-width: 800px;
+  min-width: 450px;
 }
 
 .getUpdate {
-  width: 500px;
-  height: 200px;
+  width: 100%;
+  max-width: 800px;
+  min-width: 450px;
   background-color: white;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 10px;
+  margin-bottom: 15px;
 }
 
 .getUpdate .titik {
@@ -106,25 +130,7 @@ header .overlay {
   color: black;
 }
 
-.hasil-reaksi {
-  display: flex;
-  justify-content: space-between;
-}
-
-.hasil-reaksi img {
-  width: 20px;
-  height: 20px;
-}
-
-.hasil-reaksi span {
-  color: black;
-}
-
-.reaksi {
-  display: flex;
-  justify-content: space-between;
-}
-.reaksi .ion-icon {
-  width: 50px;
-  height: 50px;
+.love-icon {
+  color: red;
+  font-size: 25px;
 }
