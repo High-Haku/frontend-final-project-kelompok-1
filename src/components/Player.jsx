@@ -1,43 +1,165 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-import SpotifyPlayer from "react-spotify-web-playback";
+import Loading from "../asset/rippleLoading.svg";
+import "./player.css";
 
 export default function Player() {
-  const spotify = useSelector((state) => state.spotifyAccessReducer);
   const playback = useSelector((state) => state.playbackReducer);
-  // console.log(playback);
+  const [progressBar, setprogressBar] = useState(0);
+  const [volume, setVolume] = useState(60);
+  const [pause, setPause] = useState(false);
+  const [mute, setMute] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  if (!spotify.accessToken || !playback.playSong) return null;
+  const [songDuration, setSongDuration] = useState(0);
+  const [audioCurrentTime, setAudioCurrentTime] = useState(0);
+
+  const audio = useRef();
+  const seekSlider = useRef();
+  const currentTimeElement = useRef();
+  const animationRef = useRef();
+
+  useEffect(() => {
+    if (!loading) {
+      updateProgressSlider(seekSlider.current);
+      handleVolume(volume);
+      seekSlider.current.max = Math.floor(songDuration);
+    }
+  }, [loading]);
+
+  // Toggle Audio Play Button
+  useEffect(() => {
+    if (pause) {
+      audio.current.play();
+      animationRef.current = requestAnimationFrame(whilePlaying);
+    } else {
+      audio.current.pause();
+      cancelAnimationFrame(animationRef.current);
+    }
+  }, [pause]);
+
+  // Toggle Mute Button
+  useEffect(() => {
+    audio.current.muted = mute ? true : false;
+  }, [mute]);
+
+  useEffect(() => {
+    if (seekSlider.current) updateProgressSlider(seekSlider.current);
+  }, [progressBar]);
+
+  function handleAudioBar(e) {
+    audio.current.currentTime = e;
+    setprogressBar(e);
+  }
+
+  function handleVolume(e) {
+    audio.current.volume = e / 100;
+    const volumeSlider = document.querySelector(".volume");
+    updateProgressSlider(volumeSlider);
+    setVolume(e);
+  }
+
+  function updateProgressSlider(element) {
+    element.style.setProperty(
+      "--value",
+      element.id === "seek-slider" ? progressBar : element.value
+    );
+    element.style.setProperty("--min", element.min === "" ? "0" : element.min);
+    element.style.setProperty(
+      "--max",
+      element.id === "seek-slider" ? songDuration : "100"
+    );
+  }
+
+  function onReady(audio) {
+    setLoading(false);
+    setSongDuration(audio.duration);
+  }
+
+  function whilePlaying() {
+    setprogressBar(audio.current.currentTime);
+    currentTimeElement.current.textContent = calculateTime(
+      audio.current.currentTime
+    );
+
+    animationRef.current = requestAnimationFrame(whilePlaying);
+  }
+
+  const calculateTime = (secs) => {
+    const minutes = Math.floor(secs / 60);
+    const seconds = Math.floor(secs % 60);
+    const returnedSeconds = seconds < 10 ? `0${seconds}` : `${seconds}`;
+    return `${minutes}:${returnedSeconds}`;
+  };
+
   return (
-    <div
-      className="shadow"
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: "200px",
-        right: 0,
-        zIndex: 21,
-        backgroundColor: "#1F2127",
-      }}
-    >
-      <SpotifyPlayer
-        token={spotify.accessToken}
-        showSaveIcon
-        play={false}
-        uris={[playback.playSong]}
-        styles={playerStyle}
-      />
+    <div className="audio-player-container d-flex justify-content-around ">
+      <audio
+        ref={audio}
+        preload="metadata"
+        onLoadedMetadata={(e) => onReady(e.target)}
+      >
+        <source
+          src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+          type="audio/mpeg"
+        />
+        Your browser does not support the audio element.
+      </audio>
+      {loading ? (
+        <>
+          <img src={Loading} alt="loading" width={"50px"} className="m-auto" />
+        </>
+      ) : (
+        <>
+          <div className="audio-button d-flex justify-content-center align-items-center px-3 pt-1">
+            <ion-icon name="play-back-outline"></ion-icon>
+            <div className="play-pause-button" onClick={() => setPause(!pause)}>
+              {!pause ? (
+                <ion-icon name="play-circle-outline"></ion-icon>
+              ) : (
+                <ion-icon name="pause-circle-outline"></ion-icon>
+              )}
+            </div>
+            <ion-icon name="play-forward-outline"></ion-icon>
+          </div>
+          <div className="d-flex w-75 px-3 gap-2 justify-content-center align-items-center">
+            <span ref={currentTimeElement} id="current-time">
+              {calculateTime(audioCurrentTime)}
+            </span>
+            <input
+              className="playback slider-progress"
+              type="range"
+              id="seek-slider"
+              ref={seekSlider}
+              onChange={(e) => handleAudioBar(e.target.value)}
+              value={progressBar}
+            ></input>
+            <span id="duration" className="time">
+              {calculateTime(songDuration)}
+            </span>
+          </div>
+          <div className="d-flex px-3 gap-2 justify-content-center align-items-center">
+            <div
+              className="audio-button mute-button pt-1"
+              onClick={() => setMute(!mute)}
+            >
+              {!mute ? (
+                <ion-icon name="volume-high"></ion-icon>
+              ) : (
+                <ion-icon name="volume-mute"></ion-icon>
+              )}
+            </div>
+            <input
+              className="volume slider-progress"
+              type="range"
+              id="volume"
+              max="100"
+              value={volume}
+              onChange={(e) => handleVolume(e.target.value)}
+            ></input>
+          </div>
+        </>
+      )}
     </div>
   );
 }
-
-const playerStyle = {
-  activeColor: "#23262e",
-  bgColor: "#23262e",
-  color: "#fff",
-  loaderColor: "#fff",
-  sliderHandleColor: "#FFC107",
-  sliderColor: "#FFE500",
-  trackArtistColor: "#ccc",
-  trackNameColor: "#FFE500",
-};
