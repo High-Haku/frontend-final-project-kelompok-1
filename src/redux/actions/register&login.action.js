@@ -66,6 +66,7 @@ export const userLogin = (data) => {
       .then((response) => {
         alert("login berhasil");
         console.log("dapet api", response.data);
+        window.location = "/";
         dispatch({
           type: USER_LOGIN,
           payload: {
