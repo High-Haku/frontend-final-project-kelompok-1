@@ -145,7 +145,9 @@ function Home() {
 
             {/* reaksi */}
             <div className="reaksi text-dark ms-4 me-4">
+
               <ion-icon onClick={clickLove} name="heart-outline"></ion-icon>
+
               <ion-icon name="chatbox-ellipses-outline"></ion-icon>
               <ion-icon name="share-social-outline"></ion-icon>
             </div>
