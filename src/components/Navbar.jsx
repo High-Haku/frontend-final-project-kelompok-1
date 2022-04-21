@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./navbar.css";
 
 import axios from "axios";
 
 function Navbar() {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.userReducer);
+  const [searchInput, setSearchInput] = useState("");
 
   async function logout() {
     await axios
@@ -18,27 +21,29 @@ function Navbar() {
       .catch((err) => console.log(err));
   }
 
+  function search(e) {
+    e.preventDefault();
+    navigate(`/search?q=${searchInput}`);
+  }
+
   return (
-    <nav className="w-80" style={{ height: "50px", backgroundColor: "1F1B24" }}>
+    <nav>
       <div className="container-fluid">
         <div className="row">
-          <div className="col">
-            <input
-              type="text"
-              className="rounded-3 mt-2"
-              style={{
-                width: "50%",
-                outline: "none",
-                height: "35px",
-                border: "none",
-              }}
-            />
-            <div style={{ width: "250px", display: "inline", float: "right" }}>
-              <Link
-                to="/upgrade"
-                className="bg-dark me-2 rounded-3"
-                style={{ border: "none", height: "35px", color: "white" }}
-              >
+          <div className="mx-5 col d-flex justify-content-between">
+            <div className="search">
+              <form onSubmit={(e) => search(e)}>
+                <input
+                  type="text"
+                  className="search-input"
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search Artist / Songs"
+                />
+                <ion-icon onClick={search} name="search-circle"></ion-icon>
+              </form>
+            </div>
+            <div className="d-flex justify-content-end">
+              <Link to="/upgrade" className="btn-upgrade shadow">
                 Upgrade Account
               </Link>
 
@@ -47,13 +52,17 @@ function Navbar() {
                   width: "40px",
                   heigth: "40px",
                   borderRadius: "50%",
-                  display: "inline",
                 }}
               >
                 <Dropdown.Toggle
                   variant="none"
                   id="dropdown-basic"
-                  style={{ heigth: "40px", border: "none", outline: "none" }}
+                  style={{
+                    heigth: "40px",
+                    border: "none",
+                    outline: "none",
+                    color: "white",
+                  }}
                 >
                   <img
                     style={{
@@ -61,8 +70,9 @@ function Navbar() {
                       height: "40px",
                       borderRadius: "50%",
                       boxSizing: "border-box",
+                      objectFit: "cover",
                     }}
-                    src="https://images.unsplash.com/photo-1644982647531-daff2c7383f3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+                    src={`https://melodico.herokuapp.com/images/${user.image}`}
                     alt=""
                   />
                 </Dropdown.Toggle>

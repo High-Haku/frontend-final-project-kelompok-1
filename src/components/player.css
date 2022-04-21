@@ -4,8 +4,9 @@
   bottom: 0;
   right: 0;
   left: 200px;
-  z-index: 99;
+  z-index: 2;
   background-color: rgb(23, 25, 32);
+  box-shadow: 1px 0px 4px 1px rgba(0, 0, 0, 0.603);
 }
 
 .audio-button {

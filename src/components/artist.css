@@ -9,6 +9,7 @@
 
 .artist-card {
   width: 100%;
+  max-width: 200px;
   text-align: center;
   transition: 1s cubic-bezier(0.39, 0.575, 0.565, 1);
 }
@@ -51,54 +52,4 @@
 
 .card:hover.card::after {
   opacity: 1;
-}
-
-.table-song-content img {
-  width: 50px;
-  height: 50px;
-  aspect-ratio: "1/1";
-  object-fit: cover;
-  transition: 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-
-.table-song-title p,
-span {
-  margin: 0;
-  padding: 0;
-}
-
-.table-song-title p {
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-  color: #ffe500;
-}
-
-.table-song-title p:hover,
-span:hover {
-  opacity: 0.8;
-}
-
-.table-song-title span {
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.table-song-action {
-  height: 50px;
-  font-size: 24px;
-}
-
-tr:hover td.table-song-content img {
-  cursor: pointer;
-  transform: scale(1.1);
-}
-
-.table-song-action ion-icon {
-  cursor: pointer;
-  transition: 300ms cubic-bezier(0.215, 0.61, 0.355, 1);
-}
-
-.table-song-action ion-icon:hover {
-  transform: scale(1.2);
 }

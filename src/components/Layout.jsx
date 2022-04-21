@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import setUserInfo from "../redux/actions/user.action";
+import { setUserInfo } from "../redux/actions/user.action";
 
 // Components ///
 import Navbar from "./Navbar";
@@ -53,6 +53,6 @@ function Layout() {
       </div>
     </>
   );
-            }
+}
 
 export default Layout;

@@ -19,6 +19,11 @@ export default function Player() {
   const currentTimeElement = useRef();
   const animationRef = useRef();
 
+  const playingSong = useSelector((state) => state.playbackReducer);
+
+  const sample =
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+
   useEffect(() => {
     if (!loading) {
       updateProgressSlider(seekSlider.current);
@@ -27,16 +32,15 @@ export default function Player() {
     }
   }, [loading]);
 
-  // Toggle Audio Play Button
   useEffect(() => {
-    if (pause) {
-      audio.current.play();
-      animationRef.current = requestAnimationFrame(whilePlaying);
-    } else {
-      audio.current.pause();
-      cancelAnimationFrame(animationRef.current);
+    setLoading(true);
+    audio.current.pause();
+    if (playingSong.currentSong.url) {
+      audio.current.src = playingSong.currentSong.url;
+      audio.current.load();
+      setPause(false);
     }
-  }, [pause]);
+  }, [playingSong]);
 
   // Toggle Mute Button
   useEffect(() => {
@@ -46,6 +50,16 @@ export default function Player() {
   useEffect(() => {
     if (seekSlider.current) updateProgressSlider(seekSlider.current);
   }, [progressBar]);
+
+  useEffect(() => {
+    if (pause) {
+      audio.current.play();
+      animationRef.current = requestAnimationFrame(whilePlaying);
+    } else {
+      audio.current.pause();
+      cancelAnimationFrame(animationRef.current);
+    }
+  }, [pause]);
 
   function handleAudioBar(e) {
     audio.current.currentTime = e;
@@ -73,10 +87,19 @@ export default function Player() {
 
   function onReady(audio) {
     setLoading(false);
-    setSongDuration(audio.duration);
+    if (playingSong.currentSong.url) {
+      setPause(true);
+      audio.current.play();
+    }
+    if (audio.duration) setSongDuration(audio.duration);
   }
 
   function whilePlaying() {
+    if (songDuration - 2 <= audio.current.currentTime) {
+      setPause(true);
+      cancelAnimationFrame(animationRef);
+    }
+
     setprogressBar(audio.current.currentTime);
     currentTimeElement.current.textContent = calculateTime(
       audio.current.currentTime
@@ -93,73 +116,84 @@ export default function Player() {
   };
 
   return (
-    <div className="audio-player-container d-flex justify-content-around ">
-      <audio
-        ref={audio}
-        preload="metadata"
-        onLoadedMetadata={(e) => onReady(e.target)}
-      >
-        <source
-          src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-          type="audio/mpeg"
-        />
-        Your browser does not support the audio element.
-      </audio>
-      {loading ? (
-        <>
-          <img src={Loading} alt="loading" width={"50px"} className="m-auto" />
-        </>
-      ) : (
-        <>
-          <div className="audio-button d-flex justify-content-center align-items-center px-3 pt-1">
-            <ion-icon name="play-back-outline"></ion-icon>
-            <div className="play-pause-button" onClick={() => setPause(!pause)}>
-              {!pause ? (
-                <ion-icon name="play-circle-outline"></ion-icon>
-              ) : (
-                <ion-icon name="pause-circle-outline"></ion-icon>
-              )}
-            </div>
-            <ion-icon name="play-forward-outline"></ion-icon>
+    <>
+      <div className="audio-player-container d-flex justify-content-around ">
+        {loading ? (
+          <div
+            className="h-100 d-flex"
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 1,
+              backgroundColor: "#171920",
+            }}
+          >
+            <img
+              src={Loading}
+              alt="loading"
+              width={"50px"}
+              className="m-auto"
+            />
           </div>
-          <div className="d-flex w-75 px-3 gap-2 justify-content-center align-items-center">
-            <span ref={currentTimeElement} id="current-time">
-              {calculateTime(audioCurrentTime)}
-            </span>
-            <input
-              className="playback slider-progress"
-              type="range"
-              id="seek-slider"
-              ref={seekSlider}
-              onChange={(e) => handleAudioBar(e.target.value)}
-              value={progressBar}
-            ></input>
-            <span id="duration" className="time">
-              {calculateTime(songDuration)}
-            </span>
+        ) : (
+          ""
+        )}
+        <audio
+          ref={audio}
+          src="https://melodico.herokuapp.com/music/1650354463161-TULUS - Hati-Hati di Jalan.mp3"
+          preload="metadata"
+          onLoadedMetadata={(e) => onReady(e.target)}
+        ></audio>
+        <div className="audio-button d-flex justify-content-center align-items-center px-3 pt-1">
+          <ion-icon name="play-back-outline"></ion-icon>
+          <div className="play-pause-button" onClick={() => setPause(!pause)}>
+            {!pause ? (
+              <ion-icon name="play-circle-outline"></ion-icon>
+            ) : (
+              <ion-icon name="pause-circle-outline"></ion-icon>
+            )}
           </div>
-          <div className="d-flex px-3 gap-2 justify-content-center align-items-center">
-            <div
-              className="audio-button mute-button pt-1"
-              onClick={() => setMute(!mute)}
-            >
-              {!mute ? (
-                <ion-icon name="volume-high"></ion-icon>
-              ) : (
-                <ion-icon name="volume-mute"></ion-icon>
-              )}
-            </div>
-            <input
-              className="volume slider-progress"
-              type="range"
-              id="volume"
-              max="100"
-              value={volume}
-              onChange={(e) => handleVolume(e.target.value)}
-            ></input>
+          <ion-icon name="play-forward-outline"></ion-icon>
+        </div>
+        <div className="d-flex w-75 px-3 gap-2 justify-content-center align-items-center">
+          <span ref={currentTimeElement} id="current-time">
+            {calculateTime(audioCurrentTime)}
+          </span>
+          <input
+            className="playback slider-progress"
+            type="range"
+            id="seek-slider"
+            ref={seekSlider}
+            onChange={(e) => handleAudioBar(e.target.value)}
+            value={progressBar}
+          ></input>
+          <span id="duration" className="time">
+            {calculateTime(songDuration)}
+          </span>
+        </div>
+        <div className="d-flex px-3 gap-2 justify-content-center align-items-center">
+          <div
+            className="audio-button mute-button pt-1"
+            onClick={() => setMute(!mute)}
+          >
+            {!mute ? (
+              <ion-icon name="volume-high"></ion-icon>
+            ) : (
+              <ion-icon name="volume-mute"></ion-icon>
+            )}
           </div>
-        </>
-      )}
-    </div>
+          <input
+            className="volume slider-progress"
+            type="range"
+            id="volume"
+            max="100"
+            value={volume}
+            onChange={(e) => handleVolume(e.target.value)}
+          ></input>
+        </div>
+      </div>
+    </>
   );
 }

@@ -18,6 +18,8 @@ import AddArtist from "./pages/admin/AddArtist";
 import Admin from "./pages/admin/Admin";
 import Favourites from "./pages/favourites/Favourites";
 import CreatePlaylist from "./pages/createPlaylist/CreatePlaylist";
+import SearchPage from "./pages/search/SearchPage";
+import ArtistPage from "./pages/artist/ArtistPage";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
         <Route path="/create-playlist" element={<CreatePlaylist />}></Route>
         <Route path="/favourites" element={<Favourites />}></Route>
         <Route path="/upgrade" element={<Upgrade />}></Route>
+        <Route path="/search" element={<SearchPage />}></Route>
+        <Route path="/artist/:id" element={<ArtistPage />}></Route>
         <Route path="/admin" element={<Admin />}></Route>
         <Route path="/admin/song" element={<AddSong />}></Route>
         <Route path="/admin/album" element={<AddAlbum />}></Route>
